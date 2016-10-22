@@ -40,7 +40,9 @@ SOURCES += \
     src/mmc_windows.c \
     src/uboot_env.c \
     src/crc32.c \
-    src/eval_math.c
+    src/eval_math.c \
+    3rdparty/tweetnacl/tweetnacl.c \
+    3rdparty/tweetnacl/randombytes.c
 
 osx {
     INCLUDEPATH += /usr/local/include /usr/local/opt/libarchive/include
@@ -56,7 +58,10 @@ win32 {
     QMAKE_CFLAGS += -std=gnu99
 }
 
-LIBS += -lconfuse -larchive -lsodium
+LIBS += -lconfuse -larchive
+
+# Test in Qt w/o libsodium
+#LIBS += -lsodium
 
 HEADERS += \
     3rdparty/fatfs/src/ff.h \
@@ -84,7 +89,8 @@ HEADERS += \
     src/archive_open.h \
     src/uboot_env.h \
     src/crc32.h \
-    src/eval_math.h
+    src/eval_math.h \
+    3rdparty/tweetnacl/tweetnacl.h
 
 OTHER_FILES += \
     fwupdate.conf \

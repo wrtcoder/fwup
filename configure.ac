@@ -43,7 +43,15 @@ AS_IF([test "x$PKG_CONFIG" = "xno"],[
 
 PKG_CHECK_MODULES([ARCHIVE], [libarchive], [], AC_MSG_ERROR([Requires libarchive. Libarchive must be built with zlib supprot.]))
 PKG_CHECK_MODULES([CONFUSE], [libconfuse >= 2.8], [], AC_MSG_ERROR([Requires libconfuse v2.8 or later]))
-PKG_CHECK_MODULES([SODIUM], [libsodium], [], AC_MSG_ERROR([Requires libsodium]))
+
+#AC_ARG_WITH([libsodium],
+#            [AS_HELP_STRING([--with-libsodium], [use libsodium instead of built-in tweetnacl [default=no]])])
+
+#if test "x$with_libsodium" = "xyes"; then
+    PKG_CHECK_MODULES([SODIUM], [libsodium], [], [AC_MSG_ERROR(with-libsodium specified, but libsodium wasn't found.)])
+#else
+#    AC_DEFINE(USE_TWEETNACL, [1], [Use tweetnacl for crypto])
+#fi
 
 # Platform-specific additions
 AS_CASE([$host_os],

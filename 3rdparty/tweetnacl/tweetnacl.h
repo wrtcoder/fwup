@@ -111,7 +111,6 @@ extern int crypto_hashblocks_sha512_tweet(unsigned char *,const unsigned char *,
 #define crypto_hashblocks_sha512_IMPLEMENTATION "crypto_hashblocks/sha512/tweet"
 #define crypto_hashblocks_sha256_tweet_STATEBYTES 32
 #define crypto_hashblocks_sha256_tweet_BLOCKBYTES 64
-extern int crypto_hashblocks_sha256_tweet(unsigned char *,const unsigned char *,unsigned long long);
 #define crypto_hashblocks_sha256_tweet_VERSION "-"
 #define crypto_hashblocks_sha256 crypto_hashblocks_sha256_tweet
 #define crypto_hashblocks_sha256_STATEBYTES crypto_hashblocks_sha256_tweet_STATEBYTES
@@ -137,6 +136,12 @@ extern int crypto_hash_sha256_tweet(unsigned char *,const unsigned char *,unsign
 #define crypto_hash_sha256_BYTES crypto_hash_sha256_tweet_BYTES
 #define crypto_hash_sha256_VERSION crypto_hash_sha256_tweet_VERSION
 #define crypto_hash_sha256_IMPLEMENTATION "crypto_hash/sha256/tweet"
+typedef struct {
+
+} crypto_hash_sha256_state;
+extern int crypto_hash_sha256_init(crypto_hash_sha256_state *);
+extern int crypto_hash_sha256_update(crypto_hash_sha256_state *,const unsigned char *, unsigned long long);
+extern int crypto_hash_sha256_final(crypto_hash_sha256_state *,unsigned char *, const size_t);
 #define crypto_onetimeauth_PRIMITIVE "poly1305"
 #define crypto_onetimeauth crypto_onetimeauth_poly1305
 #define crypto_onetimeauth_verify crypto_onetimeauth_poly1305_verify
