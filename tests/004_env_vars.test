@@ -33,6 +33,7 @@ meta-product="${TEST_ENV_VAR}"
 file-resource "${TEST_ENV_VAR}" {
   length=1024
   blake2b-256="b25c2dfe31707f5572d9a3670d0dcfe5d59ccb010e6aba3b81aad133eb5e378b"
+  sha256="3734e087427c2e3723464e86b5ff774c2ac6fc73e98f981fc208e0da915305fb"
 }
 task "complete" {
   on-resource "${TEST_ENV_VAR}" {

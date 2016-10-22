@@ -15,7 +15,6 @@
  */
 
 #include "fwup_genkeys.h"
-#include <sodium.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

@@ -27,7 +27,6 @@
 #include <string.h>
 #include <archive.h>
 #include <archive_entry.h>
-#include <sodium.h>
 
 // Global variable for passing the top level cfg pointer through libconfuse
 // This is needed for validating some of the function calls.
@@ -286,7 +285,7 @@ static cfg_opt_t file_resource_opts[] = {
     CFG_STR("host-path", 0, CFGF_NONE),
     CFG_INT("length", 0, CFGF_NONE),
     CFG_STR("blake2b-256", 0, CFGF_NONE),
-    CFG_STR("sha256", 0, CFGF_NONE), // Old hash for files - use blake2b-256 now
+    CFG_STR("sha256", 0, CFGF_NONE),
     CFG_INT("assert-size-lte", -1, CFGF_NONE),
     CFG_INT("assert-size-gte", -1, CFGF_NONE),
     CFG_IGNORE_UNKNOWN

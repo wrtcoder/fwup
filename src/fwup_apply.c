@@ -28,7 +28,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <sodium.h>
 
 #include "requirement.h"
 #include "functions.h"

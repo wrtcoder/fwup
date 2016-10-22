@@ -20,6 +20,7 @@ cat >$EXPECTED_META_CONF <<EOF
 file-resource "TEST" {
 length=2048
 blake2b-256="7049efc404edfbd339c1814c3306ba84cb59fb89580219998402f3e3719ed788"
+sha256="fd4f1ad87dbd1c6ce3092ee83d5477df1699e5209e3baa477dfdd3faa1432391"
 }
 task "complete" {
 on-resource "TEST" {

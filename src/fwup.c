@@ -25,8 +25,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <sodium.h>
-
 #include "mmc.h"
 #include "util.h"
 #include "fwup_apply.h"

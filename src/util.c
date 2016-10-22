@@ -381,3 +381,29 @@ char *strndup(const char *s, size_t n)
     return buf;
 }
 #endif
+
+void fwup_hash_init(struct fwup_hash_state *state)
+{
+#ifndef USE_TWEETNACL
+    crypto_generichash_init(&state->hash_state, NULL, 0, crypto_generichash_BYTES);
+#endif
+    crypto_hash_sha256_init(&state->sha256_state);
+}
+
+void fwup_hash_update(struct fwup_hash_state *state, const unsigned char *in, unsigned long long inlen)
+{
+#ifndef USE_TWEETNACL
+    crypto_generichash_update(&state->hash_state, in, inlen);
+#endif
+    crypto_hash_sha256_update(&state->sha256_state, in, inlen);
+}
+
+void fwup_hash_final(struct fwup_hash_state *state)
+{
+#ifndef USE_TWEETNACL
+    crypto_generichash_final(&state->hash_state, state->blake2b_out,  sizeof(state->blake2b_out));
+    bytes_to_hex(state->blake2b_out, state->blake2b_out_str, sizeof(state->blake2b_out));
+#endif
+    crypto_hash_sha256_final(&state->sha256_state, state->sha256_out);
+    bytes_to_hex(state->sha256_out, state->sha256_out_str, sizeof(state->sha256_out));
+}

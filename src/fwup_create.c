@@ -25,7 +25,6 @@
 #include <string.h>
 #include <archive.h>
 #include <archive_entry.h>
-#include <sodium.h>
 
 static int compute_file_metadata(cfg_t *cfg)
 {
@@ -37,8 +36,8 @@ static int compute_file_metadata(cfg_t *cfg)
         if (!paths)
             ERR_RETURN("host-path must be set for file-resource '%s'", cfg_title(sec));
 
-        crypto_generichash_state hash_state;
-        crypto_generichash_init(&hash_state, NULL, 0, crypto_generichash_BYTES);
+        struct fwup_hash_state hash_state;
+        fwup_hash_init(&hash_state);
 
         size_t total = 0;
         char *paths_copy = strdup(paths);
@@ -55,7 +54,7 @@ static int compute_file_metadata(cfg_t *cfg)
             char buffer[1024];
             size_t len = fread(buffer, 1, sizeof(buffer), fp);
             while (len > 0) {
-                crypto_generichash_update(&hash_state, (unsigned char*) buffer, len);
+                fwup_hash_update(&hash_state, (unsigned char*) buffer, len);
                 total += len;
                 len = fread(buffer, 1, sizeof(buffer), fp);
             }
@@ -63,12 +62,13 @@ static int compute_file_metadata(cfg_t *cfg)
         }
         free(paths_copy);
 
-        unsigned char hash[crypto_generichash_BYTES];
-        crypto_generichash_final(&hash_state, hash, sizeof(hash));
-        char hash_str[sizeof(hash) * 2 + 1];
-        bytes_to_hex(hash, hash_str, sizeof(hash));
+        fwup_hash_final(&hash_state);
 
-        cfg_setstr(sec, "blake2b-256", hash_str);
+#ifndef USE_TWEETNACL
+        cfg_setstr(sec, "blake2b-256", hash_state.blake2b_out_str);
+#endif
+        cfg_setstr(sec, "sha256", hash_state.sha256_out_str);
+
         cfg_setint(sec, "length", total);
     }
 

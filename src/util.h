@@ -23,6 +23,12 @@
 #include <sys/types.h>
 #include "../config.h"
 
+#ifdef USE_TWEETNACL
+#include "3rdparty/tweetnacl/tweetnacl.h"
+#else
+#include <sodium.h>
+#endif
+
 struct tm;
 
 int timestamp_to_tm(const char *timestamp, struct tm *tmp);
@@ -128,5 +134,22 @@ char *strndup(const char *s, size_t n);
 #else
 int set_environment(const char *key, const char *value);
 #endif
+
+// File hashing
+struct fwup_hash_state {
+#ifndef USE_TWEETNACL
+    // Include Blake2b-256 hashes for backward compatibility when libsodium
+    // is available.
+    crypto_generichash_state hash_state;
+    unsigned char blake2b_out[crypto_generichash_BYTES];
+    char blake2b_out_str[crypto_generichash_BYTES * 2 + 1];
+#endif
+    crypto_hash_sha256_state sha256_state;
+    unsigned char sha256_out[crypto_hash_sha256_BYTES];
+    char sha256_out_str[crypto_hash_sha256_BYTES * 2 + 1];
+};
+void fwup_hash_init(struct fwup_hash_state *state);
+void fwup_hash_update(struct fwup_hash_state *state, const unsigned char *in, unsigned long long inlen);
+void fwup_hash_final(struct fwup_hash_state *state);
 
 #endif // UTIL_H

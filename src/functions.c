@@ -28,8 +28,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <sodium.h>
-
 #define DECLARE_FUN(FUN) \
     static int FUN ## _validate(struct fun_context *fctx); \
     static int FUN ## _compute_progress(struct fun_context *fctx); \
@@ -236,8 +234,8 @@ int raw_write_run(struct fun_context *fctx)
     struct block_writer writer;
     OK_OR_RETURN(block_writer_init(&writer, fctx->output_fd, 128 * 1024, 9)); // 9 -> 512 byte blocks
 
-    crypto_generichash_state hash_state;
-    crypto_generichash_init(&hash_state, NULL, 0, crypto_generichash_BYTES);
+    struct fwup_hash_state hash_state;
+    fwup_hash_init(&hash_state);
     for (;;) {
         off_t offset;
         size_t len;
@@ -250,7 +248,7 @@ int raw_write_run(struct fun_context *fctx)
         if (len == 0)
             break;
 
-        crypto_generichash_update(&hash_state, (unsigned char*) buffer, len);
+        fwup_hash_update(&hash_state, (unsigned char*) buffer, len);
 
         ssize_t written = block_writer_pwrite(&writer, buffer, len, dest_offset + offset);
         if (written < 0)
@@ -274,11 +272,8 @@ int raw_write_run(struct fun_context *fctx)
 
     // Verify hash if present.
     if (expected_hash) {
-        unsigned char hash[crypto_generichash_BYTES];
-        crypto_generichash_final(&hash_state, hash, sizeof(hash));
-        char hash_str[sizeof(hash) * 2 + 1];
-        bytes_to_hex(hash, hash_str, sizeof(hash));
-        if (memcmp(hash_str, expected_hash, sizeof(hash_str)) != 0)
+        fwup_hash_final(&hash_state);
+        if (memcmp(hash_state.blake2b_out_str, expected_hash, sizeof(hash_state.blake2b_out_str)) != 0)
             ERR_RETURN("raw_write detected blake2b digest mismatch");
     }
 

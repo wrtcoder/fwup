@@ -22,7 +22,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <archive_entry.h>
-#include <sodium.h>
 
 int fwfile_add_meta_conf(cfg_t *cfg, struct archive *a, const unsigned char *signing_key)
 {

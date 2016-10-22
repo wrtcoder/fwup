@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <sodium.h>
 
 static int check_resource(cfg_t *cfg, const char *file_resource_name, struct archive *a, struct archive_entry *ae)
 {
@@ -45,8 +44,8 @@ static int check_resource(cfg_t *cfg, const char *file_resource_name, struct arc
     if (strlen(expected_hash) != crypto_generichash_BYTES * 2)
         ERR_RETURN("Detected blake2b hash with the wrong length for %s", file_resource_name);
 
-    crypto_generichash_state hash_state;
-    crypto_generichash_init(&hash_state, NULL, 0, crypto_generichash_BYTES);
+    struct fwup_hash_state hash_state;
+    fwup_hash_init(&hash_state);
     size_t length_left = expected_length;
     while (length_left != 0) {
         char buffer[4096];
@@ -59,15 +58,12 @@ static int check_resource(cfg_t *cfg, const char *file_resource_name, struct arc
         if (len <= 0)
             ERR_RETURN("Error reading '%s' in archive", archive_entry_pathname(ae));
 
-        crypto_generichash_update(&hash_state, (unsigned char*) buffer, len);
+        fwup_hash_update(&hash_state, (unsigned char*) buffer, len);
         length_left -= len;
     }
 
-    unsigned char hash[crypto_generichash_BYTES];
-    crypto_generichash_final(&hash_state, hash, sizeof(hash));
-    char hash_str[sizeof(hash) * 2 + 1];
-    bytes_to_hex(hash, hash_str, sizeof(hash));
-    if (memcmp(hash_str, expected_hash, sizeof(hash_str)) != 0)
+    fwup_hash_final(&hash_state);
+    if (memcmp(hash_state.blake2b_out_str, expected_hash, sizeof(hash_state.blake2b_out_str)) != 0)
         ERR_RETURN("Detected blake2b digest mismatch for %s", file_resource_name);
 
     return 0;
