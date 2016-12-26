@@ -101,7 +101,8 @@ TESTS = 001_simple_fw.test \
 	102_multi_requires.test \
 	103_error_msg.test \
 	104_info_msg.test \
-	105_string_resource.test
+	105_string_resource.test \
+	106_resource_order.test
 
 if HAVE_SPARSE_SEEK
 TESTS += \
