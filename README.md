@@ -696,3 +696,7 @@ developments under license policy of following terms.
 
 On systems without the function strptime(), a version from Google is
 included that is distributed under the Apache 2.0 license.
+
+The examples pull in Buildroot which is GPLv2+ licensed. The `examples`
+directory is for documentation purposes only and is not required for using
+`fwup`.
