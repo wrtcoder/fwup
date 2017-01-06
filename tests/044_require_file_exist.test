@@ -15,13 +15,13 @@ cat >$CONFIG <<EOF
 # +-----------------------------+
 # | MBR                         |
 # +-----------------------------+
-# | p0: Boot (Simulated)        |
+# | p1: Boot (Simulated)        |
 # +-----------------------------+
-# | p1: Rootfs A (Simulated)    |
+# | p2: Rootfs A (Simulated)    |
 # +-----------------------------+
-# | p2: Rootfs B (Simulated)    |
+# | p3: Rootfs B (Simulated)    |
 # +-----------------------------+
-# | p3: Data (Simulated)        |
+# | p4: Data (Simulated)        |
 # +-----------------------------+
 
 define(BOOT_PART_OFFSET, 63)

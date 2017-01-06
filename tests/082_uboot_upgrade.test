@@ -14,11 +14,13 @@ cat >$CONFIG <<EOF
 # +-----------------------------+
 # | U-boot environment          |
 # +-----------------------------+
-# | p0: Rootfs A (Simulated)    |
+# | p1: Rootfs A (Simulated)    |
 # +-----------------------------+
-# | p1: Rootfs B (Simulated)    |
+# | p2: Rootfs B (Simulated)    |
 # +-----------------------------+
-# | p2: Data (Simulated)        |
+# | p3: Data (Simulated)        |
+# +-----------------------------+
+# | p4: Unused                  |
 # +-----------------------------+
 
 define(UBOOT_ENV_OFFSET, 4)
