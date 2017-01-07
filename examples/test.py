@@ -13,7 +13,7 @@ def spawnQemuSession():
     if debug:
         session.logfile = sys.stdout
     info('Waiting for Linux to boot...')
-    session.expect('Welcome to Buildroot')
+    session.expect('Starting dropbear sshd')
     return session
 
 def runLogin(session):

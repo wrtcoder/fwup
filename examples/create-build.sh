@@ -81,7 +81,7 @@ fi
 
 BUILDROOT_STATE_FILE=$BASE_DIR/buildroot-$BUILDROOT_VERSION/.fwup-examples-br-state
 BUILDROOT_EXPECTED_STATE_FILE=$BUILD_DIR/.fwup-examples-expected-br-state
-$BASE_DIR/scripts/buildroot-state.sh $BUILDROOT_VERSION $BASE_DIR/patches > $BUILDROOT_EXPECTED_STATE_FILE
+$BASE_DIR/scripts/buildroot-state.sh $BUILDROOT_VERSION $BASE_DIR/patches/buildroot > $BUILDROOT_EXPECTED_STATE_FILE
 
 create_buildroot_dir() {
     # Clean up any old versions of Buildroot
@@ -91,7 +91,7 @@ create_buildroot_dir() {
     $BASE_DIR/scripts/download-buildroot.sh $BUILDROOT_VERSION $BUILDROOT_DL_DIR $BASE_DIR
 
     # Apply patches
-    $BASE_DIR/buildroot/support/scripts/apply-patches.sh $BASE_DIR/buildroot $BASE_DIR/patches
+    $BASE_DIR/buildroot/support/scripts/apply-patches.sh $BASE_DIR/buildroot $BASE_DIR/patches/buildroot
 
     if ! [[ -z $BUILDROOT_DL_DIR ]]; then
         # Symlink Buildroot's dl directory so that it can be cached between builds
